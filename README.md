@@ -3,8 +3,8 @@
 Interactive and fun way to visualize todo lists.
 
 Features:
-[X] Seperate Tasks 
-[X] Create Multiple Boards
+* Seperate Tasks 
+* Create Multiple Boards
 
 To Do:
 [] USER/SESSION PERSISTENCE
