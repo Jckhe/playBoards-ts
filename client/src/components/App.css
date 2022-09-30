@@ -1,0 +1,442 @@
+@font-face {
+  font-family: 'pathagonia';
+  src: url('./assets/pathagonia-webfont.woff2') format('woff2'),
+       url('./assets/pathagonia-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+
+body {
+  text-align: center;
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.App-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  font-family: 'pathagonia';
+  font-size: 2.5rem;
+  margin: 20px;
+  letter-spacing: 10px;
+  margin-bottom: 100px;
+}
+
+
+.Board {
+  margin: 20px;
+  display: flex;
+  border: 1px solid rgb(62, 62, 62);
+  background-color: rgb(231, 195, 151);
+  border-radius: 50px;
+  width: 1150px;
+  height: 700px;
+  padding: 100px;
+  justify-content: space-evenly;
+  gap: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ContainerDiv {
+  flex-direction: row;
+  display: flex;
+  gap: 50px;
+  width: 100%;
+}
+
+.ToDoContainer, .InProgressContainer, .DoneContainer {
+  width: 400px;
+  height: 600px;
+  border: 2px solid black;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0px 2px 7px 0px rgba(0,0,0);
+  transition: all 0.3s ease-in-out;
+}
+
+.ToDoContainer:hover, .InProgressContainer:hover, .DoneContainer:hover {
+  box-shadow: 0px 3px 20px 0px rgb(118, 118, 118);
+  transform: scale(1.02);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.ToDoContainer {
+  background-color: #bfb7b0;
+  
+}
+
+.InProgressContainer {
+  background-color: #bfb7b0;
+}
+
+.DoneContainer {
+  background-color: #bfb7b0;
+}
+
+#todoHeader {
+  margin: 15px;
+  padding: 7.5px 0;
+  background-color: #F2533A;
+  padding-top: 8px;
+  border: 2px solid rgb(94, 94, 94);
+  width: 170px;
+  height: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 0.15s ease-out;
+  filter:drop-shadow(1px 2px 1px rgb(0, 0, 0));
+}
+
+#todoHeader:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+#todoHeader h2 {
+  font-family: 'pathagonia';
+  color:rgb(255, 255, 255);
+  font-size: 1.65rem;
+  margin-bottom: 7.5px;
+  vertical-align: middle;
+  padding-bottom: 15px;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: rgb(7, 7, 7);
+}
+
+#inprogHeader {
+  margin: 15px;
+  padding: 7.5px 0;
+  background-color: #87bcba;
+  padding-top: 8px;
+  border: 2px solid rgb(94, 94, 94);
+  width: 170px;
+  height: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 0.15s ease-out;
+  filter:drop-shadow(1px 2px 3px rgb(0, 0, 0));
+}
+
+#inprogHeader:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+#inprogHeader h2 {
+  font-family: 'pathagonia';
+  color:white;
+  font-size: 1.6rem;
+  margin-bottom: 7.5px;
+  vertical-align: middle;
+  padding-bottom: 15px;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: rgb(7, 7, 7);
+}
+
+#doneHeader {
+  margin: 15px;
+  padding: 7.5px 0;
+  background-color: #F7A21B;
+  padding-top: 8px;
+  border: 2px solid rgb(94, 94, 94);
+  width: 170px;
+  height: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 0.15s ease-out;
+  filter:drop-shadow(1px 2px 3px rgb(0, 0, 0));
+}
+
+#doneHeader:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+#doneHeader h2 {
+  font-family: 'pathagonia';
+  color:white;
+  font-size: 1.65rem;
+  margin-bottom: 7.5px;
+  vertical-align: middle;
+  padding-bottom: 15px;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: rgb(7, 7, 7);
+}
+
+
+div.task {
+  font-size: 16px;
+  overflow: hidden;
+  position: relative;
+  height: 100px;
+  width: 250px;
+  padding: 12px;
+  background-color: #ada6a0;
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;  
+  flex-direction: column;
+}
+
+#content-span {
+  font-family: 'pathagonia';
+  font-size: 18px;
+}
+
+
+
+.contentContainer {
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #F2E9E1;
+  border: 2px solid black;
+  padding: 5px;
+  height: 50px;
+}
+
+.taskButton1 {
+  cursor:pointer;
+}
+
+
+.taskList-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  margin: 5px;
+  gap: 10px;
+  align-items: center;
+}
+
+.createTaskContainer {
+  height: 100px;
+  width: 200px;
+  background-color: #F2E9E1;
+  border: 2px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  transition: all 0.6s ease-out;
+}
+
+.create-text-form {
+  width: 175px;
+  background-color: #afafaf;
+  white-space: pre-line;
+  z-index: 3;
+  outline: none;
+  height: 20px;
+  resize: none;
+  margin-top: 2px;
+  transition: all 0.5s ease-in-out;
+  padding: 5px;
+}
+
+#expandedTextForm {
+  width: 210px;
+  height: 50px;
+  transition: all 0.5s ease-in-out;
+}
+
+#taskform1 {
+  opacity: 0;
+}
+
+#taskform2 {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+#openCreateTaskContainer {
+  width: 300px;
+  height: 150px;
+  transition: all 0.5s ease-in;
+}
+
+#openedTextHeading {
+  bottom: 10px;
+  transition: all 0.1s linear;
+}
+
+
+#p-wrap {
+  white-space: pre-line;
+}
+
+.CreateTaskHeading {
+  margin-top: auto;
+  position: relative;
+  bottom: 10px;
+  z-index: 8;
+  font-family: 'pathagonia';
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: rgb(223, 223, 223);
+}
+
+
+.taskButton1:hover {
+  transform: rotate(20deg);
+  transition: all 0.2s ease-in-out;
+}
+
+.loginButtonContainer {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}
+
+.loginButton {
+  position: relative;
+  background-image: url(./assets/button.png) no-repeat scroll 0 0 transparent;
+  color: #000000;
+  cursor: pointer;
+  font-weight: bold;
+  height: 20px;
+  padding-bottom: 2px;
+  width: 150px;
+  height: 45px;
+  transition: all 0.3s ease-in-out;
+}
+
+.loginButton:hover {
+  transform: scale(1.05);
+  transition: all 0.25s ease-in-out;
+}
+
+.overlay {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9;
+}
+
+.loginPopupDiv {
+  padding: 20px;
+  background-color: rgb(64, 64, 64);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  align-items: center;
+  top: 200px;
+  left: 480px;
+  width: 600px;
+  height: 525px;
+  border: 2px solid white;
+  border-radius: 25px;
+}
+
+.closeLogin {
+  cursor: pointer;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+  z-index: 20;
+}
+
+.closeLogin:hover {
+  filter:blur(3px);
+}
+
+.loginContainer {
+  display: flex;
+  
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  gap: 10px;
+}
+
+.loginContainer input {
+  margin: 10px;
+}
+
+.addButton {
+  position: relative;
+  top: 27.5px;
+  z-index: 7;
+  transition: all 0.1s ease-in-out;
+}
+
+.addButton:hover {
+  transform: scale(1.05);
+  transition: all 0.1s ease-in-out;
+}
+
+.BoardHeading {
+  font-family: "pathagonia";
+  font-size: 2.5rem;
+  color: rgb(207, 207, 207);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: rgb(7, 7, 7);
+  transition: all 0.5s linear;
+}
+
+.BoardHeading h2:hover {
+  transform: scale(1.05);
+  transition: all .3s linear;
+}
+
+
+.createBoardDiv {
+  position: absolute;
+  left: 280px;
+  top: 95px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.createBoardDiv input {
+  height: 20px;
+  outline: none;
+  padding: 5px;
+  background-color: rgb(226, 239, 249);
+}
+
+
+.createnewboard {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.createnewboard:hover {
+transform: scale(1.10);
+transition: all 0.2s ease-in-out;
+}

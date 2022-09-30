@@ -1,0 +1,37 @@
+{
+  "name": "react-usestateref",
+  "version": "1.0.8",
+  "description": "useRef and UseState together!",
+  "main": "dist/index.js",
+  "funding": "https://www.buymeacoffee.com/aminadav",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx rimraf dist && tsc",
+    "deploy": "npm run build && npm version patch && git push && npm publish"
+  },
+  "peerDependencies": {
+    "react": ">16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aminadav/react-useRefState.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "useState",
+    "useRef"
+  ],
+  "author": "Aminadav Glickshtein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aminadav/react-useRefState/issues"
+  },
+  "homepage": "https://github.com/Aminadav/react-useRefState#readme",
+  "devDependencies": {
+    "@types/react": "^16.0.0",
+    "typescript": "^4.0.0"
+  }
+}
