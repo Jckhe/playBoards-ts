@@ -2,10 +2,13 @@
 /* eslint-disable no-unused-vars */
 import './App.css';
 import { ToDoContainer, InProgressContainer, DoneContainer } from './Containers';
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useId, useRef } from 'react';
 import useState from 'react-usestateref'
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import greyButton from './assets/button.png'
 import { v4 as uuid } from 'uuid';
+import { useCookies } from 'react-cookie';
 //helper functions, refer to file. <- trying not to pollute files
 import * as helper from './helperFunctions'
 const { START, DONE, DELETE, statusArr, removeItemWithSlice } = helper;
@@ -20,13 +23,30 @@ export function Board(props) {
   const [todoList, addTasks] = useState([]);
   const [progressList, addProgressList, progressListref] = useState([]);
   const [doneList, addDoneList] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
-  const {name} = props;
+  const {name, username, dbTaskStorage} = props;
 
   function storeTasks(task) {
     const {id, content, status} = task;
     addTasks([...todoList, task]);
   }
+
+  function deleteTaskBoard(taskID) {
+      let todoIndex;
+      console.log("TASKID START", taskID)
+      todoList.forEach((el, index) => { if (el.uid === taskID) todoIndex = index });
+      const task = todoList.splice(todoIndex, 1)
+      addTasks([...todoList])
+  }
+
+  function deleteTaskBoardInProgress(taskID) {
+    let todoIndex;
+    console.log("TASKID START", taskID)
+    progressList.forEach((el, index) => { if (el.uid === taskID) todoIndex = index });
+    const task = progressList.splice(todoIndex, 1)
+    addProgressList([...progressList])
+}
 
 
   function updateTasks(update) {
@@ -64,6 +84,7 @@ export function Board(props) {
   }
 
   useEffect(() => {
+    console.log("UPDATED STATE?", todoList, progressList, doneList)
     const updatedTaskStore = {
       todoList: todoList,
       progressList: progressList,
@@ -71,16 +92,43 @@ export function Board(props) {
     }
     //updates the master task storage obj
     updateTaskStorage(updatedTaskStore);
-    console.log(taskStorage);
+    console.log("UPHERE",taskStorage)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todoList, progressList, doneList])
+
+  useEffect(() => {
+    if (cookies.LoggedIn) {
+      fetch('http://localhost:3333/store', {
+            method: 'POST',
+            headers: {
+                'Accept': "application/json, text/plain",
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({username: username, boards: taskStorage})
+        })
+        .then((res) => console.log(res))
+      
+    }
+  }, [taskStorage])
+
+  //run ONCE
+  useEffect(() => {
+    if (cookies.LoggedIn) {
+      updateTasks(dbTaskStorage)
+      addTasks(dbTaskStorage.todoList)
+      addProgressList(dbTaskStorage.progressList)
+      addDoneList(dbTaskStorage.doneList)
+    }
+  }, [props])
+
+
 
   return (
     <div className="Board">
       <div className="BoardHeading"><h2>{props.name}</h2></div>
       <div className="ContainerDiv">
-        <ToDoContainer updateTasks={updateTasks} storeTasks={storeTasks}/>
-        <InProgressContainer updateTasks={updateTasks} progressList={progressList} />
+        <ToDoContainer todoList={todoList} deleteTaskBoard={deleteTaskBoard} updateTasks={updateTasks} storeTasks={storeTasks}/>
+        <InProgressContainer deleteTaskBoard={deleteTaskBoardInProgress} updateTasks={updateTasks} progressList={progressList} />
         <DoneContainer updateTasks={updateTasks} doneList={doneList} />
       </div>
     </div>

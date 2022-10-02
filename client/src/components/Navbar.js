@@ -79,10 +79,12 @@ export function LoginPopup(props) {
                 { wrongPW ? <span style={{color: 'red'}}>Invalid Password / User !</span> : null}
                 { correctPW ?  <span style={{color: 'green'}}>Success! Logging In..</span> : null}
                 <input type="text" onChange={(e) => {setUsername(e.target.value)}} placeholder="Username" className="username"/>
-                <input type="text" onChange={(e) => {setPassword(e.target.value)}} placeholder="Password" className="password"/>
-                <input type="submit" className="submitLogin" onClick={handleLogin} placeholder='Login' ></input>
+                <input type="password" onChange={(e) => {setPassword(e.target.value)}} placeholder="Password" className="password"/>
+                <div className="submitLoginButtonContainer"><input type="submit" onClick={handleLogin} className="submitLoginButton" placeholder='' value='Login'></input></div>
+                {/* <input type="submit" className="submitLogin" onClick={} placeholder='Login' ></input> */}
                 <span>No Account? Sign up here!</span>
-                <input type="submit" className="signUp" onClick={() => {toggleSignup(true)}} placeholder='Signup'></input>
+                <input type="submit" className="submitLoginButton loginbuttons2" onClick={() => {toggleSignup(true)}} value='Sign Up'></input>
+                <input type="submit" className="submitLoginButton loginbuttons2" onClick={() => {handleClick()}} value='Guest Mode'></input>
             </div>
         )
     }
@@ -90,10 +92,9 @@ export function LoginPopup(props) {
     function SignUpContainer() {
         return (
             <div className="loginContainer">
-                <h4>Sign up!</h4>
                 <input type="text" key="username" value={username} onChange={(e) => {setUsername(e.target.value)}} placeholder="Username" className="username"/>
                 <input type="text" key="password" value={password} onChange={(e) => {setPassword(e.target.value)}} placeholder="Password" className="password"/>
-                <input type="submit" className="submitLogin" onClick={handleSignup} placeholder='Signup' ></input>
+                <input type="submit" className="submitLogin" onClick={(handleSignup)} placeholder='Signup' ></input>
             </div>
         )
     }
@@ -103,7 +104,7 @@ export function LoginPopup(props) {
     return (
         <div className="loginPopupDiv">
             <img src={closeButton} onClick={() => {handleClick()}} alt="" className="closeLogin"/>
-            <h3>Login</h3>
+            {!signup ? <h3 id="loginHeader">LOGIN</h3> :  <h3 id="loginHeader">SIGN UP</h3>}
             {!signup ? LoginContainer() : SignUpContainer()}
         </div>
     )

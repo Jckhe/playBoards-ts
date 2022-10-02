@@ -11,7 +11,7 @@ const { START, DONE, DELETE, statusArr, removeItemWithSlice } = helper;
 export function ToDoContainer(props) {
     //useState to define the array of tasks to do
     const [tasksList, addTasks] = useState([]);
-    const { storeTasks, updateTasks, uid } = props;
+    const { storeTasks, updateTasks, uid, todoList } = props;
   
     function addTask(newTask) {
       const { id, content, uid } = newTask;
@@ -29,8 +29,7 @@ export function ToDoContainer(props) {
     //starts tasks from DONE -> In Progress
     function startTask(taskID) {
       let todoIndex;
-      console.log("TASKID START", taskID)
-      tasksList.forEach((el, index) => { if (el.uid === taskID) todoIndex = index });
+      tasksList.forEach((el, index) => { if (el.uid === taskID.uid) todoIndex = index });
       const task = tasksList.splice(todoIndex, 1)
       task[0].uid = taskID;
       const update = {
@@ -40,16 +39,27 @@ export function ToDoContainer(props) {
       addTasks([...tasksList]);
       updateTasks(update)
     }
+
+    function deleteTask(taskID) {
+      let todoIndex;
+      tasksList.forEach((el, index) => { if (el.uid === taskID) todoIndex = index });
+      const task = tasksList.splice(todoIndex, 1)
+      addTasks([...tasksList]);
+      props.deleteTaskBoard(taskID);
+    }
   
   
     useEffect(() => {
-    }, [tasksList])
+      if (todoList !== tasksList) {
+        addTasks(todoList)
+      }
+    }, [todoList, tasksList])
   
     return (
       <div className="ToDoContainer">
         <div id="todoHeader"><h2>TO-DO</h2></div>
         <div className="taskList-container todo">
-          {tasksList.length > 0 ? tasksList.map((id, index) => <Task uid={id['uid']} content={id['content']} status={id['status']} index={index} key={index} updateTask={startTask} />) : ''}
+          {tasksList.length > 0 ? tasksList.map((id, index) => <Task deleteTask={deleteTask} uid={id['uid']} content={id['content']} status={id['status']} index={index} key={index} updateTask={startTask} />) : ''}
           <CreateTask id={Math.max(0, tasksList.length)} addTask={addTask} />
         </div>
       </div>
@@ -58,23 +68,29 @@ export function ToDoContainer(props) {
   
   export function InProgressContainer(props) {
     
-    const { progressList, updateTasks } = props;
+    const { deleteTaskBoard, progressList, updateTasks } = props;
     const [tasksList, addTasks] = useState(progressList);
   
   
     function finishTask(taskID) {
       let inProgIndex;
-      console.log("FINISH TASK", taskID.uid)
-      tasksList.forEach((el, index) => { if (el.uid === taskID.uid) inProgIndex = index});
+      tasksList.forEach((el, index) => { if (el.uid === taskID.uid.uid) inProgIndex = index});
       let updatedList = removeItemWithSlice(tasksList, inProgIndex)
-      console.log("INDEX", inProgIndex)
       const update = {
         type: "DONE",
-        task: taskID,
+        task: taskID.uid,
       }
       addTasks(updatedList);
       updateTasks(update);
       
+    }
+
+    function deleteTask(taskID) {
+      let inProgIndex;
+      tasksList.forEach((el, index) => { if (el.uid === taskID.uid) inProgIndex = index });
+      const task = tasksList.splice(inProgIndex, 1)
+      addTasks([...tasksList]);
+      deleteTaskBoard(taskID);
     }
       
     useEffect(()=>{
@@ -87,7 +103,7 @@ export function ToDoContainer(props) {
       <div className="InProgressContainer">
         <div id="inprogHeader"><h2>IN-PROGRESS</h2></div>
         <div className="taskList-container inprog">
-          {tasksList.length > 0 ? tasksList.map((id, index) => <Task uid={id['uid']} content={id['content']} status={id['status']} id={id} index={index} key={index} updateTask={finishTask} />) : ''}
+          {tasksList.length > 0 ? tasksList.map((id, index) => <Task deleteTask={deleteTask} uid={id['uid']} content={id['content']} status={id['status']} id={id} index={index} key={index} updateTask={finishTask} />) : ''}
         </div>
       </div>
     )

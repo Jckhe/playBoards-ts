@@ -34,9 +34,12 @@ app.get('/', (req, res) => {
 })
 
 
+app.get('/getboards/:username', userController.getBoards)
+
+
 app.post('/login', userController.loginUser)
 
-
+app.post('/store', userController.storeBoards)
 
 app.post('/signup', userController.createUser)
 app.use(express.static("client/dist"));

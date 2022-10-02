@@ -3,6 +3,7 @@
 import './App.css';
 import playButton from './assets/playButton.png'
 import xButton from './assets/xButton.png'
+import closeButton from './assets/crossButton.png'
 import { useEffect } from 'react';
 import useState from 'react-usestateref'; 
 import addButton from './assets/addButton.png'
@@ -16,7 +17,7 @@ console.log(statusArr)
 
 
 export function Task(props) {
-    const { index, updateTask, status, uid, content } = props;
+    const { index, updateTask, status, uid, content, deleteTask } = props;
   
     function handleStart(event) {
       let thisID;
@@ -32,6 +33,21 @@ export function Task(props) {
       //need this tasks, index number
       updateTask(thisID);
     }
+
+    function delTask() {
+      let thisID;
+      if (status === 'todo') thisID = uid;
+      else {
+        thisID = {
+          status: status,
+          content: content,
+          status: status,
+          uid: uid
+        }
+      }
+      //need this tasks, index number
+      deleteTask(thisID)
+    }
   
     const buttonSrc = () => {
       let statusSrc;
@@ -46,7 +62,7 @@ export function Task(props) {
         }
         break;
         case statusArr[2]: {
-          statusSrc = delButton;
+          statusSrc = null;
         }
       }
       return statusSrc;
@@ -56,6 +72,7 @@ export function Task(props) {
             <div className="contentContainer">
               <span id="content-span">{props.content}</span>
             </div>
+            <img alt="" height="22px" width="22px" className="taskButton2" src={closeButton} onClick={() => {delTask()}}/>
             <div className="buttonContainers">
               <img alt="" height="30px" width="30px" className="taskButton1" src={buttonSrc()} onClick={handleStart}/>
             </div>
