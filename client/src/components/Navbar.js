@@ -1,25 +1,26 @@
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import useState from 'react-usestateref';
 import './App.css';
 import closeButton from './assets/crossButton.png'
+import {loginState} from '../redux/slices/storageSlice'
 
-
-export function LoginBar(props) {
+export function LoginBar({toggleLoginActive}) {
     //opens the login popup 
-    const { handleClick } = props;
 
     return (
         <>
             <div className="loginButtonContainer">
-                <input type="submit" onClick={() => handleClick()} className="loginButton" placeholder='Login' value='Login'></input>
+                <input type="submit" onClick={() => toggleLoginActive(true)} className="loginButton" placeholder='Login' value='Login'></input>
             </div>
         </>
     )
 }
 
-export function LoginPopup(props) {
+export function LoginPopup({toggleLoginActive}) {
+    //hooks
+    const dispatch = useDispatch();
     //closes the login popup div
-    const { handleClick } = props;
     const [ username, setUsername ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ wrongPW, toggleWrongPW ] = useState(false)
@@ -27,9 +28,6 @@ export function LoginPopup(props) {
     const [ signup, toggleSignup ] = useState(false)
 
     function handleLogin(e) {
-        console.log("USERNAME: ", username)
-        console.log("PASSWORD", password)
-        //clears the fields
         fetch('http://localhost:3333/login', {
             method: 'POST',
             credentials: 'include',
@@ -44,22 +42,18 @@ export function LoginPopup(props) {
         .then(res => {
             //check for response
             if (res.status === 200) {
-                toggleCorrectPW(true) 
-                setTimeout(() => {window.location.reload()}, 1888)
+                toggleCorrectPW(true)
+                dispatch(loginState(username))
+                // setTimeout(() => {window.location.reload()}, 1888)
+                toggleLoginActive(false);
             }
-            else if (res.status === 400) {
-                toggleWrongPW(true)
-            }
-        })
-
-
-    }
+            else if (res.status === 400) toggleWrongPW(true)
+    })
+}
 
     useEffect(() => {}, [wrongPW])
 
     function handleSignup(e) {
-        console.log("USERNAME: ", username)
-        console.log("PASSWORD", password)
         //clears the fields
         fetch('http://localhost:3333/signup', {
             method: 'POST',
@@ -84,7 +78,7 @@ export function LoginPopup(props) {
                 {/* <input type="submit" className="submitLogin" onClick={} placeholder='Login' ></input> */}
                 <span>No Account? Sign up here!</span>
                 <input type="submit" className="submitLoginButton loginbuttons2" onClick={() => {toggleSignup(true)}} value='Sign Up'></input>
-                <input type="submit" className="submitLoginButton loginbuttons2" onClick={() => {handleClick()}} value='Guest Mode'></input>
+                <input type="submit" className="submitLoginButton loginbuttons2" onClick={() => {toggleLoginActive(false)}} value='Guest Mode'></input>
             </div>
         )
     }
@@ -103,7 +97,7 @@ export function LoginPopup(props) {
 
     return (
         <div className="loginPopupDiv">
-            <img src={closeButton} onClick={() => {handleClick()}} alt="" className="closeLogin"/>
+            <img src={closeButton} onClick={() => {toggleLoginActive(false)}} alt="" className="closeLogin"/>
             {!signup ? <h3 id="loginHeader">LOGIN</h3> :  <h3 id="loginHeader">SIGN UP</h3>}
             {!signup ? LoginContainer() : SignUpContainer()}
         </div>

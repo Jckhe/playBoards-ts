@@ -13,40 +13,30 @@ import delButton from './assets/delButton.png'
 import * as helper from './helperFunctions';
 const { START, DONE, DELETE, statusArr, removeItemWithSlice } = helper;
 console.log(statusArr)
-
+import {deleteTasksEarly} from '../redux/slices/storageSlice'
+import { useSelector, useDispatch } from 'react-redux';
 
 
 export function Task(props) {
-    const { index, updateTask, status, uid, content, deleteTask } = props;
-  
+    const { index, status, updateTask, uid, content, boardIndex, deleteTask } = props;
+    const dispatch = useDispatch();
+
     function handleStart(event) {
-      let thisID;
-      if (status === 'done') thisID = uid;
-      else {
-        thisID = {
-          status: status,
-          content: content,
-          status: status,
-          uid: uid
-        }
+      const task = {
+        content: content,
+        uid: uid
       }
-      //need this tasks, index number
-      updateTask(thisID);
+      updateTask(task);
     }
 
     function delTask() {
-      let thisID;
-      if (status === 'todo') thisID = uid;
-      else {
-        thisID = {
-          status: status,
-          content: content,
-          status: status,
-          uid: uid
-        }
+      const task = {
+        content: content,
+        status: status,
+        uid: uid,
+        boardID: boardIndex
       }
-      //need this tasks, index number
-      deleteTask(thisID)
+      dispatch(deleteTasksEarly(task))
     }
   
     const buttonSrc = () => {
@@ -62,7 +52,7 @@ export function Task(props) {
         }
         break;
         case statusArr[2]: {
-          statusSrc = null;
+          statusSrc = delButton;
         }
       }
       return statusSrc;

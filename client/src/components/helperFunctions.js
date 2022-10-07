@@ -1,7 +1,7 @@
 export const START = 'START';
 export const DONE = 'DONE';
 export const DELETE = 'DELETE';
-export const statusArr = ['todo', 'inprogress', 'done'];
+export const statusArr = ['toDo', 'inProgress', 'toDelete'];
 export function removeItemWithSlice(arr, index) {
     const firstArr = arr.slice(0, index);
     const secondArr = arr.slice(index + 1);
