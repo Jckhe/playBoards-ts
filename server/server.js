@@ -11,7 +11,7 @@ const userController = require('./controllers/userController')
 
 
 mongoose.connect(
-    "mongodb+srv://jackie:Ballsack213@cluster1.akypwpz.mongodb.net/?retryWrites=true&w=majority",
+    "mongodb+srv://bigboss:pk1234@cluster1.akypwpz.mongodb.net/?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
 )
 

@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import useState from 'react-usestateref';
 import './App.css';
 import closeButton from './assets/crossButton.png'
-import {loginState} from '../redux/slices/storageSlice'
+import { loginState } from '../redux/slices/storageSlice';
+import { Dispatch, SetStateAction } from "react";
 
-export function LoginBar({toggleLoginActive}) {
+export function LoginBar({toggleLoginActive}: LoginBarProps) {
     //opens the login popup 
 
     return (
@@ -17,17 +17,17 @@ export function LoginBar({toggleLoginActive}) {
     )
 }
 
-export function LoginPopup({toggleLoginActive}) {
+export function LoginPopup({toggleLoginActive}: LoginBarProps) {
     //hooks
     const dispatch = useDispatch();
     //closes the login popup div
-    const [ username, setUsername ] = useState('')
-    const [ password, setPassword ] = useState('')
-    const [ wrongPW, toggleWrongPW ] = useState(false)
-    const [ correctPW, toggleCorrectPW ] = useState(false)
-    const [ signup, toggleSignup ] = useState(false)
+    const [ username, setUsername ] = useState<string>('')
+    const [ password, setPassword ] = useState<string>('')
+    const [ wrongPW, toggleWrongPW ] = useState<boolean>(false)
+    const [ correctPW, toggleCorrectPW ] = useState<boolean>(false)
+    const [ signup, toggleSignup ] = useState<boolean>(false)
 
-    function handleLogin(e) {
+    function handleLogin() {
         fetch('http://localhost:3333/login', {
             method: 'POST',
             credentials: 'include',
@@ -44,7 +44,7 @@ export function LoginPopup({toggleLoginActive}) {
             if (res.status === 200) {
                 toggleCorrectPW(true)
                 dispatch(loginState(username))
-                // setTimeout(() => {window.location.reload()}, 1888)
+                setTimeout(() => {window.location.reload()}, 1888)
                 toggleLoginActive(false);
             }
             else if (res.status === 400) toggleWrongPW(true)
@@ -53,7 +53,7 @@ export function LoginPopup({toggleLoginActive}) {
 
     useEffect(() => {}, [wrongPW])
 
-    function handleSignup(e) {
+    function handleSignup() {
         //clears the fields
         fetch('http://localhost:3333/signup', {
             method: 'POST',
@@ -67,6 +67,7 @@ export function LoginPopup({toggleLoginActive}) {
     }
 
 
+    //LOGIN CONTAINER COMPONENT / THIS IS INSIDE LOGINPOPUP CONTAINER (WE SWITCH BETWEEN LOGIN AND SIGNUP THIS WAY)
     function LoginContainer() {
         return (
             <div className="loginContainer">
@@ -83,6 +84,7 @@ export function LoginPopup({toggleLoginActive}) {
         )
     }
 
+    //SIGNUP CONTAINER COMPONENT / THIS IS INSIDE LOGINPOPUP CONTAINER (WE SWITCH BETWEEN LOGIN AND SIGNUP THIS WAY)
     function SignUpContainer() {
         return (
             <div className="loginContainer">
@@ -102,4 +104,10 @@ export function LoginPopup({toggleLoginActive}) {
             {!signup ? LoginContainer() : SignUpContainer()}
         </div>
     )
+}
+
+
+
+interface LoginBarProps {
+    toggleLoginActive: Dispatch<SetStateAction<boolean>>;
 }
