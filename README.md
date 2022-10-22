@@ -4,6 +4,9 @@ Interactive and fun way to visualize todo lists.
 
 Changelog
 10/21/2022
+
+
+
 *Migrated and rewrote codebase to be in Typescript.
 *Implemented Redux ToolKit over classic Redux
 
