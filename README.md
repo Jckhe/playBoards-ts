@@ -7,8 +7,8 @@ Changelog
 
 
 
-*Migrated and rewrote codebase to be in Typescript.
-*Implemented Redux ToolKit over classic Redux
+* Migrated and rewrote codebase to be in Typescript.
+* Implemented Redux ToolKit over classic Redux
 
 
 ---> Always trying to modularize and organize codebase for readability <---
