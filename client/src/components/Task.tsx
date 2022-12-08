@@ -48,7 +48,7 @@ export function CreateTask({addTask, uid}:createTaskProps) {
     const [expand, openCreateTask] = useState<boolean>(false);
 
     //handle's pressing enter while in the create task box.
-    function HandlePress(event: React.KeyboardEvent<HTMLInputElement>) {
+    function HandlePress(event: React.KeyboardEvent<HTMLTextAreaElement>) {
       event.preventDefault();
       if (event.key === 'Enter') {
         const newTask = {
@@ -65,11 +65,19 @@ export function CreateTask({addTask, uid}:createTaskProps) {
     }, [expand])
 
     return (
-        <div className="createTaskContainer">
-          {expand ?  <img className="addButton"  height="25px" src={xButton} alt="" onClick={() => {openCreateTask(false)}}/> : <img className="addButton"  height="25px" src={addButton} alt="" onClick={() => {openCreateTask(true)}}/>}
+        <div style={{height: `${expand ? '200px' : '100px'}`}} className="createTaskContainer">
+          {expand ?  <img className="addButton"  height="25px" src={xButton} alt="" onClick={() => {openCreateTask(true)}}/> : <img className="addButton"  height="25px" src={addButton} alt="" onClick={() => {openCreateTask(true)}}/>}
           <div className="CreateTaskHeading" ><h3 className="CreateTaskHeading">CREATE NEW TASK</h3></div>
           <div className="inputContainer">
-            <input value={taskContent} onChange={(e) => {setTaskContent(e.target.value)}} type="text" className="create-text-form" onKeyUpCapture={(event) => {HandlePress(event)}} placeholder="Enter Task Here.."></input> 
+            <textarea 
+            value={taskContent}
+            onChange={(e) => {setTaskContent(e.target.value)}}
+            
+            style={{height: `${expand ? '80px' : '20px'}`}}
+            className="create-text-form" 
+            onKeyUpCapture={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {HandlePress(event)}} 
+            placeholder="Enter Task Here.."
+            ></textarea> 
             </div>
         </div>
       )

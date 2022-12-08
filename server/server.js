@@ -1,13 +1,16 @@
+// const schema = require('./schema')
 const express = require('express');
 const app = express();
-const users = require('./routes/users');
 const path = require('path');
+const { graphqlHTTP } = require('express-graphql');
 const {createProxyMiddleware} = require('http-proxy-middleware')
+const {typeDefs, resolvers} = require('./schema')
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const userController = require('./controllers/userController')
+const userController = require('./controllers/userController');
+const { ApolloServer } = require('apollo-server-express');
 
 
 mongoose.connect(
@@ -18,10 +21,16 @@ mongoose.connect(
 
 
 const PORT = 3333;
+//intiate a new Apollo graphQL server here.
+async function startApolloServer(typeDefs, resolvers) {
+    const server = new ApolloServer({typeDefs, resolvers});
+    await server.start();
+    server.applyMiddleware({app, path: "/graphql"});
+}
 
 
 
-app.use(cors({credentials: true, origin: 'http://localhost:8080', methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']}))
+// app.use(cors({credentials: true, origin: 'http://localhost:8080', methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']}))
 // app.use(cors({credentials: true, origin: 'http://localhost:8080'}))
 app.use(bodyParser.json());
 
@@ -32,6 +41,7 @@ app.use(cookieParser())
 app.get('/', (req, res) => {
     res.send(200);
 })
+
 
 
 app.get('/getboards/:username', userController.getBoards)
@@ -45,6 +55,8 @@ app.post('/signup', userController.createUser)
 app.use(express.static("client/dist"));
 
 
+
+
 app.listen(3333, () => {
     console.log(`Server listening on port: ${PORT}...`);
 });
@@ -52,9 +64,11 @@ app.listen(3333, () => {
 /**
  * 404 handler
  */
-app.use('*', (req,res) => {
-    es.status(404).send('Not Found');
-});
+// app.use('*', (req,res) => {
+//     res.status(404).send('Not Found');
+// });
+
+startApolloServer(typeDefs, resolvers);
   
   /**
    * Global error handler

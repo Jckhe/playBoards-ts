@@ -17,14 +17,15 @@ module.exports = {
         })
     ],
     devServer: {
-        host: 'localhost',
-        port: 8080,
         static: {
             // match the output path
             directory: path.resolve(__dirname, 'client/dist'),
             // match the output 'publicPath'
             publicPath: '/',
           },
+        proxy: {
+            '/graphql': 'http://localhost:3333',
+        }
     },
     module: {
         rules: [

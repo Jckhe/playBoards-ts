@@ -10,7 +10,8 @@ export interface boardsType {
     toDo: newTask[],
     inProgress: newTask[],
     toDelete: newTask[],
-    id: string,
+    uuid: string,
+    backgroundColor: string,
 }
 
 
@@ -21,6 +22,9 @@ export interface newTask {
     status: string
 }
 
+
+
+//REACT PROP TYPES
 // TASK COMPONENT TYPES
 export interface createTaskProps {
     addTask: (arg: any) => void,
@@ -60,6 +64,8 @@ export type BoardProps = {
     id: string,
     key?: number
   }
+
+
   
 
 //App Props Types

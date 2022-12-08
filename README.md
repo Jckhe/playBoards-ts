@@ -16,6 +16,7 @@ Features:
 * Create Multiple Boards
 * State Persists
 * Sign up / Login
+* Change Project Name
 
 To Do:
 * Organize and sort boards into folders.

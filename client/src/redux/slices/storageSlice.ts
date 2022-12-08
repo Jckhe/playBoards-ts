@@ -10,7 +10,8 @@ const initialState:stateType = {
         toDo: new Array<newTask>(),
         inProgress: new Array<newTask>(),
         toDelete: new Array<newTask>(),
-        id: v4(),
+        uuid: v4(),
+        backgroundColor: '#e7c397' 
     }],
 }
 
@@ -20,14 +21,14 @@ export const storageSlice = createSlice({
     reducers: {
         addTasks: (state, action: PayloadAction<newTask>) => {
             //
-            const index: number = state.boards.findIndex((board) => action.payload.boardID === board.id);
+            const index: number = state.boards.findIndex((board) => action.payload.boardID === board.uuid);
             const currentBoard = {...state.boards[index]};
             currentBoard['toDo'].push(action.payload);
             //update state using index
             state.boards[index] = currentBoard;
         },
         startTasks: (state, action: PayloadAction<newTask>) => {
-            const BoardIndex: number = state.boards.findIndex((board) => action.payload.boardID === board.id);
+            const BoardIndex: number = state.boards.findIndex((board) => action.payload.boardID === board.uuid);
             //shallow copy of the current board using index
             const currentBoard: boardsType = {...state.boards[BoardIndex]}
              //we need to find the current index of the task within the todo array
@@ -43,7 +44,7 @@ export const storageSlice = createSlice({
              state.boards[BoardIndex] = currentBoard;
         },
         finishTasks: (state, action: PayloadAction<newTask>) => {
-            const BoardIndex: number = state.boards.findIndex((board) => action.payload.boardID === board.id);
+            const BoardIndex: number = state.boards.findIndex((board) => action.payload.boardID === board.uuid);
             const currentBoard: boardsType = {...state.boards[BoardIndex]}
             //we need to find the current index of the task within the todo array
             const taskIndex:number = currentBoard['inProgress'].findIndex((task: newTask) => action.payload.uid === task.uid);
@@ -55,7 +56,7 @@ export const storageSlice = createSlice({
             state.boards[BoardIndex] = currentBoard;
         },
         deleteTasks: (state, action: PayloadAction<newTask>) => {
-            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.id);
+            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.uuid);
             const currentBoard: boardsType = {...state.boards[BoardIndex]}
             //we need to find the current index of the task within the todo array
             const taskIndex = currentBoard['toDelete'].findIndex((task: newTask) => action.payload.uid === task.uid);
@@ -65,7 +66,7 @@ export const storageSlice = createSlice({
             state.boards[BoardIndex] = currentBoard;
         },
         deleteTasksEarly: (state, action: PayloadAction<newTask>) => {
-            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.id);
+            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.uuid);
             //needs to be any in order to index into the array correctly
             const currentBoard: any = {...state.boards[BoardIndex]};
             //need the status of the action payload
@@ -83,7 +84,8 @@ export const storageSlice = createSlice({
                 toDo: new Array<newTask>(),
                 inProgress: new Array<newTask>(),
                 toDelete: new Array<newTask>(),
-                id: v4()
+                uuid: v4(),
+                backgroundColor: '#e7c397'
             }
             //push into state
             state.boards.push(newBoard);
@@ -91,16 +93,25 @@ export const storageSlice = createSlice({
         deleteBoards: (state, action: PayloadAction<boardsType>) => {
             //we need to traverse the state and find the index of the board to delete
             //in the array
-            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.id === board.id);
+            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.uuid === board.uuid);
             //splice the said element 
             state.boards.splice(BoardIndex, 1);
         },
-        changeBoardName: (state, action: PayloadAction<any>) => {
-            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.id);
+        changeBoardName: (state, action: PayloadAction<{projectName: string, boardID: string}>) => {
+            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.uuid);
             const currentBoard: boardsType = state.boards[BoardIndex];
             //now we have current board change it's name
+            console.log("CHECKING CHANGE BOARD NAME: ", BoardIndex)
             currentBoard.projectName = action.payload.projectName;
             //by reference, this should change the projectName
+        },
+        changeBoardColor: (state, action: PayloadAction<{newColor: string, boardID: string}>) => {
+            //get boardIndex
+            const BoardIndex: number = state.boards.findIndex((board: boardsType) => action.payload.boardID === board.uuid);
+            //get currentBoard
+            const currentBoard: boardsType = state.boards[BoardIndex];
+            //update by reference, the background color.
+            currentBoard.backgroundColor = action.payload.newColor;
         },
         setBoards: (state, action: PayloadAction<[boardsType]>) => {
             //this sets the board arr when fetched from the DB
@@ -108,8 +119,8 @@ export const storageSlice = createSlice({
         },
         loginState: (state, action: PayloadAction<string>) => {
             state.username = action.payload;
-        }
-    }
+        },
+    },
 })
 
 // interface stateType {

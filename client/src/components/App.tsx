@@ -51,22 +51,22 @@ function App() {
 
   //runs in the beginning of load in order to retrieve boards from DB and update the state.
   useEffect(() => {
-    if (cookies.LoggedIn) {
-      toggleLoggedIn(true)
-      fetch(`http://localhost:3333/getboards/:${cookies.LoggedIn}`, {
-        method: 'GET',
-        headers: {
-            'Accept': "application/json, text/plain",
-            'Content-Type': 'application/json',
-          },
-    })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log("FETCHING BOARDS: ", res);
-      dispatch(loginState(res.username));
-      dispatch(setBoards(JSON.parse(res.boards)))
-    })
-  }
+  //   if (cookies.LoggedIn) {
+  //     toggleLoggedIn(true)
+  //     fetch(`http://localhost:3333/getboards/:${cookies.LoggedIn}`, {
+  //       method: 'GET',
+  //       headers: {
+  //           'Accept': "application/json, text/plain",
+  //           'Content-Type': 'application/json',
+  //         },
+  //   })
+  //   .then((res) => res.json())
+  //   .then((res) => {
+  //     console.log("FETCHING BOARDS: ", res);
+  //     dispatch(loginState(res.username));
+  //     dispatch(setBoards(JSON.parse(res.boards)))
+  //   })
+  // }
   }, [])
 
   
@@ -77,12 +77,12 @@ function App() {
        {addButtonClick ?  <input type="text" onKeyUpCapture={(e) => {addBoardWithKey(e)}} value={newBoardName} onChange={(e) => {setNewBoardName(e.target.value)}}/> : null}
       </div>
       {loginButtonActive ? <div className="overlay" /> : null}
-      {loginButtonActive ? <LoginPopup toggleLoginActive={toggleLoginActive} /> : null}
-      {isLoggedIn ?  <div className="loginButtonContainer"><input type="submit"className="loginButton" id="LoggedIn" placeholder='' value='Logged in as: jackie'></input></div> : <LoginBar toggleLoginActive={toggleLoginActive} />}
+      {loginButtonActive ? <LoginPopup toggleLoggedIn={toggleLoggedIn} toggleLoginActive={toggleLoginActive} /> : null}
+      {isLoggedIn ?  <div className="loginButtonContainer"><input type="submit"className="loginButton" id="LoggedIn" placeholder='' value='Logged in as: jackie'></input></div> : <LoginBar toggleLoggedIn={toggleLoggedIn} toggleLoginActive={toggleLoginActive} />}
       <header className="App-header">
         Play Boards
       </header>
-      {boards.length > 0 ? boards.map((board:any, index:number) => <Board name={board.projectName} id={board.id} key={index} />) : ''}
+      {boards.length > 0 ? boards.map((board:any, index:number) => <Board name={board.projectName} id={board.uuid} key={index} />) : ''}
     </div>
   );
 }

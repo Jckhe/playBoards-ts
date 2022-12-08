@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import './App.css';
 import closeButton from './assets/crossButton.png'
-import { loginState } from '../redux/slices/storageSlice';
+import { loginState, setBoards } from '../redux/slices/storageSlice';
 import { Dispatch, SetStateAction } from "react";
+import { response } from 'express';
+import { newTask } from './types/types';
 
 export function LoginBar({toggleLoginActive}: LoginBarProps) {
     //opens the login popup 
@@ -17,7 +19,7 @@ export function LoginBar({toggleLoginActive}: LoginBarProps) {
     )
 }
 
-export function LoginPopup({toggleLoginActive}: LoginBarProps) {
+export function LoginPopup({toggleLoginActive, toggleLoggedIn}: LoginBarProps) {
     //hooks
     const dispatch = useDispatch();
     //closes the login popup div
@@ -28,26 +30,68 @@ export function LoginPopup({toggleLoginActive}: LoginBarProps) {
     const [ signup, toggleSignup ] = useState<boolean>(false)
 
     function handleLogin() {
-        fetch('http://localhost:3333/login', {
+        const query = `query {
+            login(username: "${username}", password:"${password}") {
+                id
+                username
+                boards {
+                    projectName
+                    uuid
+                    toDo {
+                        uid
+                        content
+                        status
+                        boardID
+                    }
+                    inProgress {    
+                        uid
+                        content
+                        status
+                        boardID
+                    }
+                    toDelete {
+                        uid
+                        content
+                        status
+                        boardID
+                    }
+                    backgroundColor
+                }
+            }
+        }`
+        fetch('http://localhost:3333/graphql', {
             method: 'POST',
-            credentials: 'include',
             headers: {
                 'Accept': "application/json, text/plain",
                 'Content-Type': 'application/json',
-                'x-Trigger': 'CORS'
-
+                
               },
-              body: JSON.stringify({username: username, password: password})
+              body: JSON.stringify({query: query})
         })
-        .then(res => {
+        .then((res) => res.json())
+        .then(data => {
+            
+            let res = data.data.login;
+            //this forEach check makes sure to reassign types of empty arrays if there are empty arrays returned bacl
+            //this is important because typescript will throw an error if we set boards to an empty array without
+            //specifying that it is a new Array [] with newTask types.
+            res.boards.forEach((board: any) => {
+                console.log("In for loop", board)
+               if (board.toDo[0].uid === null) board.toDo = new Array<newTask>();
+               if (board.inProgress[0].uid === null) board.inProgress = new Array<newTask>();
+               if (board.toDelete[0].uid === null) board.toDelete = new Array<newTask>();
+            })
+            console.log("Checking Login: ", res.boards);
             //check for response
-            if (res.status === 200) {
+            if (res) {
                 toggleCorrectPW(true)
-                dispatch(loginState(username))
-                setTimeout(() => {window.location.reload()}, 1888)
+                document.cookie = `LoggedIn=${res.username}`
+                dispatch(loginState(res.username))
                 toggleLoginActive(false);
+                dispatch(setBoards(res.boards))
+                toggleLoggedIn(true);
             }
-            else if (res.status === 400) toggleWrongPW(true)
+            else toggleWrongPW(true)
     })
 }
 
@@ -110,4 +154,5 @@ export function LoginPopup({toggleLoginActive}: LoginBarProps) {
 
 interface LoginBarProps {
     toggleLoginActive: Dispatch<SetStateAction<boolean>>;
+    toggleLoggedIn: Dispatch<boolean>;
 }

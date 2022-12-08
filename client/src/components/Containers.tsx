@@ -31,6 +31,8 @@ export function ToDoContainer({boardID, boardIndex}: ContainerProps) {
         dispatch(addTasks(task));
       }
 
+      
+
       useEffect(() => {
         if (todoList !== tasksList) updateTasks(todoList);
       }, [todoList, tasksList])
@@ -101,4 +103,7 @@ export function DoneContainer({boardID, boardIndex}: ContainerProps) {
         </div>
     )
 }
+
+
+
 

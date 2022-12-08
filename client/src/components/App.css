@@ -8,6 +8,18 @@
 }
 
 
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
 body {
   text-align: center;
   background-color: #282c34;
@@ -15,6 +27,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  margin: 0;
 }
 
 .App-header {
@@ -34,10 +47,11 @@ body {
 
 
 .Board {
+  z-index: 22;
   margin: 20px;
   display: flex;
   border: 1px solid rgb(62, 62, 62);
-  background-color: rgb(231, 195, 151);
+  background-color: #e7c397;
   border-radius: 50px;
   width: 1150px;
   height: 700px;
@@ -195,7 +209,7 @@ div.task {
   font-size: 16px;
   overflow: hidden;
   position: relative;
-  height: 100px;
+  min-height: 100px;
   width: 250px;
   padding: 12px;
   background-color: #ada6a0;
@@ -208,6 +222,9 @@ div.task {
 #content-span {
   font-family: 'pathagonia';
   font-size: 18px;
+  padding: 5;
+  min-height: fit-content;
+  width: 100%;
 }
 
 
@@ -219,6 +236,9 @@ div.task {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  overflow: hidden;
+  overflow-y: scroll;
+  min-height: fit-content;
   background-color: #F2E9E1;
   border: 2px solid black;
   padding: 5px;
@@ -227,6 +247,12 @@ div.task {
 
 .taskButton1 {
   cursor:pointer;
+}
+
+.taskButton1:hover {
+  transform: scale(1.05);
+  
+  transition: all 0.5s ease-in-out;
 }
 
 
@@ -240,7 +266,6 @@ div.task {
 }
 
 .createTaskContainer {
-  height: 100px;
   width: 200px;
   background-color: #F2E9E1;
   border: 2px solid black;
@@ -255,7 +280,7 @@ div.task {
   white-space: pre-line;
   z-index: 3;
   outline: none;
-  height: 20px;
+  font-family: 'pathagonia';
   resize: none;
   margin-top: 2px;
   transition: all 0.5s ease-in-out;
@@ -305,9 +330,11 @@ div.task {
 
 
 .taskButton2 {
-  position: relative;
-  top: -50px;
-  left: -5px;
+  position: absolute;
+  top: 6px;
+  z-index: 26;
+  user-select: none!important;
+  left: 7.5px;
   transform: scale(.75);
   filter: grayscale(100%);
 }
@@ -319,16 +346,37 @@ div.task {
 }
 
 
-.taskButton1:hover {
-  transform: scale(1.05) rotate(10deg);
-  
-  transition: all 0.5s ease-in-out;
-}
+
 
 .loginButtonContainer {
   position: absolute;
   top: 100px;
   left: 100px;
+}
+
+
+.customizeDiv {
+  position: relative;
+  top: -7.75%;
+  left: 45.5%;
+  z-index: 5;
+}
+
+
+.customizeButton {
+  position: relative;
+  font-family: 'pathagonia';
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  background-image: url(./assets/button.png) no-repeat scroll 0 0 transparent;
+  color: #000000;
+  cursor: pointer;
+  font-weight: bold;
+  height: 20px;
+  padding-bottom: 2px;
+  width: 150px;
+  height: 30px;
+  transition: all 0.3s ease-in-out;
 }
 
 
@@ -368,7 +416,7 @@ div.task {
   font-family: 'pathagonia';
   padding: 20px;
   background-color: rgb(64, 64, 64);
-  z-index: 15;
+  z-index: 25;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -400,7 +448,7 @@ div.task {
 
 .loginContainer {
   display: flex;
-  
+  z-index: 25;
   border: 2px solid rgba(255, 255, 255, 0.5);
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 30px;
@@ -427,17 +475,80 @@ div.task {
 }
 
 .BoardHeading {
+  
+  padding: 15px 30px;
+  align-self: center;
+  width: 45%;
+  min-height: 125px;
+  transition: all 0.5s ease-out;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: grey;
+}
+
+.projectInput {
+  color: rgb(207, 207, 207);
   font-family: "pathagonia";
-  font-size: 2.5rem;
+  font-size: 2.55rem;
+  text-align: center;
+  outline: none;
+  background-color: transparent;
+  border: 1.5px dotted white;
+  padding: 15px 30px;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.8);
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(7, 7, 7);
+}
+
+.editButtonDiv {
+  position: absolute;
+  bottom: 56%;
+  left: 70.80%;
+  z-index: 22;
+}
+
+.editButton {
+  filter:drop-shadow(1px 2px 1px rgb(0, 0, 0));
+  position: relative;
+  transform: scale(1.1);
+  padding: 3px;
+  cursor: pointer;
+}
+
+.editButton:hover {
+  transform: scale(1.25);
+  transition: all 0.05 ease-in-out;
+  filter:drop-shadow(1px 2px 1px rgba(188, 198, 3, .55));
+  
+}
+
+.headingDiv {
+  cursor: pointer;
+}
+
+.headingDiv h2:hover {
+  transform: scale(1.05);
+  transition: all 0.5s ease-in-out;
+}
+
+.BoardHeading h2 {
+  font-family: "pathagonia";
+  padding: 0 15px;
+  font-size: 2.55rem;
   color: rgb(207, 207, 207);
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: rgb(7, 7, 7);
-  transition: all 0.5s linear;
 }
 
-.BoardHeading h2:hover {
-  transform: scale(1.05);
-  transition: all .3s linear;
+.BoardHeading:hover {
+  
+  transform: scale(1.005);
+  transition: all .5s ease-in-out;
 }
 
 
