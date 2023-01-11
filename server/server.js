@@ -38,9 +38,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
-app.get('/', (req, res) => {
-    res.send(200);
-})
+app.use('/', express.static(path.join(__dirname, '../build')));
 
 
 
