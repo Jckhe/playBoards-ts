@@ -6,7 +6,7 @@ module.exports = {
     entry: './client/src/index.tsx',
     mode: 'development',
     output: {
-        path: path.join(__dirname, 'client/dist'),
+        path: path.join(__dirname, '/build'),
         publicPath: '/',
         filename: 'bundle.js',
     },
@@ -19,7 +19,7 @@ module.exports = {
     devServer: {
         static: {
             // match the output path
-            directory: path.resolve(__dirname, 'client/dist'),
+            directory: path.resolve(__dirname, '/build'),
             // match the output 'publicPath'
             publicPath: '/',
           },
