@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import playButton from './assets/playButton.png'
-import xButton from './assets/xbutton.png'
+import xButton from './assets/Xbutton.png'
 import './App.css';
 import closeButton from './assets/crossButton.png'
 import addButton from './assets/addButton.png'
